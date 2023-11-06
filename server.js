@@ -14,7 +14,12 @@ app.get("/", (req, res) => {
   res.send("CRUD Application");
 });
 
-let items = ["User", "Ready Player One", "Zboubati"]; // Ceci va agir comme une base de données en mémoire
+let items = [
+  "User",
+  "Ready Player One",
+  "Zboubati",
+  "minimum 13 chiffres si j'viens",
+]; // Ceci va agir comme une base de données en mémoire
 
 // Create (POST)
 app.post("/items", (req, res) => {
