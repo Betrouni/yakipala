@@ -19,6 +19,7 @@ let items = [
   "Ready Player One",
   "Zboubati",
   "minimum 13 chiffres si j'viens",
+  "zoiergzpeirgpezirgu"
 ]; // Ceci va agir comme une base de données en mémoire
 
 // Create (POST)
