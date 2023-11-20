@@ -1,60 +1,26 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-const morgan = require("morgan");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+app.use(express.json());
 
-// Middlewares
-app.use(morgan("dev"));
-app.use(bodyParser.json());
-
-// Routes
-app.get("/", (req, res) => {
-  res.send("CRUD Application");
-});
-
-let items = [
-  "User",
-  "Ready Player One",
-  "Zboubati",
-  "minimum 13 chiffres si j'viens",
-  "zoiergzpeirgpezirgu"
-]; // Ceci va agir comme une base de données en mémoire
-
-// Create (POST)
-app.post("/items", (req, res) => {
-  const item = req.body;
-  items.push(item);
-  res.send(`Item with the name ${item.name} added to the database!`);
-});
-
-// Read (GET)
-app.get("/items", (req, res) => {
-  res.json(items);
-});
-
-// Update (PUT)
-app.put("/items/:name", (req, res) => {
-  const name = req.params.name;
-  const item = req.body;
-  items = items.map((i) => {
-    if (i.name === name) {
-      return item;
-    }
-    return i;
+// Connexion à MongoDB
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => {
+    console.error("Could not connect to MongoDB", err);
   });
-  res.send(`Item with the name ${name} updated in the database!`);
-});
 
-// Delete (DELETE)
-app.delete("/items/:name", (req, res) => {
-  const name = req.params.name;
-  items = items.filter((i) => i.name !== name);
-  res.send(`Item with the name ${name} removed from the database!`);
-});
+// Importation des routes
+const userRouter = require("./routes/user");
+app.use("/api/users", userRouter);
 
-// Start server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+// Démarrage du serveur
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
